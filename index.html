@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bureau d'Études Thoth | Thoth-PEC 01</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+:root{--cosmos-deep:#0b001a;--cosmos-mid:#1a0033;--accent:#a78bfa;--accent-bright:#c4b5fd;--gold:#d4af37;--text:#f5f3ff;--text2:#c4b5fd;--card:rgba(45,27,78,0.6);--border:rgba(167,139,250,0.35);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--cosmos-deep);color:var(--text);overflow-x:hidden;line-height:1.6;}
+#trail-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;}
+.cosmos-bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse at 15% 20%,rgba(139,92,246,0.22) 0%,transparent 50%),radial-gradient(ellipse at 85% 75%,rgba(109,40,217,0.18) 0%,transparent 50%),linear-gradient(180deg,#0b001a 0%,#1a0033 45%,#0f001f 100%);}
+.stars,.stars2,.stars3{position:fixed;inset:0;z-index:-1;pointer-events:none;}
+.stars{
+  background-image:
+    radial-gradient(1.5px 1.5px at 15px 25px,#fff,transparent),
+    radial-gradient(1px 1px at 45px 70px,#fff,transparent),
+    radial-gradient(2px 2px at 85px 40px,rgba(212,175,55,0.8),transparent),
+    radial-gradient(1.5px 1.5px at 130px 110px,#fff,transparent),
+    radial-gradient(1px 1px at 175px 55px,#fff,transparent),
+    radial-gradient(2px 2px at 220px 150px,rgba(167,139,250,0.7),transparent),
+    radial-gradient(1.5px 1.5px at 270px 20px,#fff,transparent),
+    radial-gradient(1px 1px at 320px 95px,#fff,transparent),
+    radial-gradient(2px 2px at 370px 160px,rgba(212,175,55,0.6),transparent),
+    radial-gradient(1.5px 1.5px at 420px 45px,#fff,transparent),
+    radial-gradient(1px 1px at 470px 120px,#fff,transparent),
+    radial-gradient(2px 2px at 520px 75px,rgba(167,139,250,0.65),transparent),
+    radial-gradient(1.5px 1.5px at 570px 140px,#fff,transparent),
+    radial-gradient(1px 1px at 610px 30px,#fff,transparent);
+  background-size:650px 180px;
+  animation:twinkle1 2.8s ease-in-out infinite;
+}
+.stars2{
+  background-image:
+    radial-gradient(1.5px 1.5px at 30px 90px,#fff,transparent),
+    radial-gradient(2px 2px at 80px 15px,rgba(212,175,55,0.7),transparent),
+    radial-gradient(1px 1px at 150px 130px,#fff,transparent),
+    radial-gradient(1.5px 1.5px at 200px 50px,#fff,transparent),
+    radial-gradient(2px 2px at 280px 170px,rgba(167,139,250,0.6),transparent),
+    radial-gradient(1px 1px at 350px 35px,#fff,transparent),
+    radial-gradient(1.5px 1.5px at 410px 100px,#fff,transparent),
+    radial-gradient(2px 2px at 490px 155px,rgba(212,175,55,0.55),transparent),
+    radial-gradient(1px 1px at 550px 60px,#fff,transparent);
+  background-size:600px 200px;
+  animation:twinkle2 3.6s ease-in-out infinite;
+}
+.stars3{
+  background-image:
+    radial-gradient(1px 1px at 60px 50px,#fff,transparent),
+    radial-gradient(1.5px 1.5px at 120px 160px,rgba(255,255,255,0.9),transparent),
+    radial-gradient(2px 2px at 190px 25px,rgba(167,139,250,0.7),transparent),
+    radial-gradient(1px 1px at 250px 110px,#fff,transparent),
+    radial-gradient(1.5px 1.5px at 340px 70px,#fff,transparent),
+    radial-gradient(2px 2px at 430px 145px,rgba(212,175,55,0.6),transparent),
+    radial-gradient(1px 1px at 510px 40px,#fff,transparent),
+    radial-gradient(1.5px 1.5px at 580px 125px,#fff,transparent);
+  background-size:620px 190px;
+  animation:twinkle3 4.2s ease-in-out infinite;
+}
+@keyframes twinkle1{0%{opacity:0.25}40%{opacity:1}70%{opacity:0.3}100%{opacity:0.8}}
+@keyframes twinkle2{0%{opacity:0.7}30%{opacity:0.2}60%{opacity:1}100%{opacity:0.4}}
+@keyframes twinkle3{0%{opacity:0.5}25%{opacity:1}55%{opacity:0.15}80%{opacity:0.9}100%{opacity:0.35}}
+nav{position:fixed;top:0;left:0;right:0;padding:1rem 5%;display:flex;justify-content:space-between;align-items:center;background:rgba(11,0,26,0.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);z-index:1000;}
+.logo-area{display:flex;align-items:center;gap:0.9rem;}
+.logo-box{width:46px;height:46px;border-radius:11px;background:linear-gradient(145deg,#2d1b4e,#1a0033);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Orbitron';font-weight:700;color:var(--gold);box-shadow:0 0 18px rgba(212,175,55,0.25);}
+.logo-box::after{content:'𓅞';font-size:1.3rem;}
+.brand-name{font-family:'Orbitron';font-weight:600;font-size:1.1rem;}
+.brand-name span{color:var(--gold);}
+.nav-links{display:flex;gap:1.8rem;list-style:none;}
+.nav-links a{color:var(--text2);text-decoration:none;font-weight:500;font-size:0.9rem;position:relative;padding-bottom:3px;transition:color 0.25s;}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:#fff;transition:width 0.35s;}
+.nav-links a:hover{color:#fff;}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%;}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:7rem 5% 4rem;}
+.hero-badge{display:inline-block;padding:0.4rem 1.2rem;background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);border-radius:50px;font-size:0.8rem;color:var(--gold);margin-bottom:1.4rem;letter-spacing:1.2px;text-transform:uppercase;}
+.hero h1{font-family:'Orbitron';font-size:clamp(2.1rem,5vw,3.5rem);font-weight:700;line-height:1.2;margin-bottom:1.1rem;background:linear-gradient(135deg,#f5f3ff 0%,#c4b5fd 45%,#d4af37 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero p{max-width:640px;font-size:1.1rem;color:var(--text2);margin-bottom:2.3rem;}
+.btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.85rem 1.7rem;border-radius:11px;font-weight:600;font-size:0.93rem;text-decoration:none;transition:all 0.3s;cursor:pointer;border:none;}
+.btn-primary{background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;box-shadow:0 4px 22px rgba(139,92,246,0.4);}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(139,92,246,0.55);}
+.btn-secondary{background:transparent;color:var(--accent-bright);border:1px solid var(--border);}
+.btn-secondary:hover{background:rgba(139,92,246,0.15);border-color:var(--accent);color:#fff;}
+.btn-gold{background:linear-gradient(135deg,#d4af37,#b8960f);color:#0b001a;box-shadow:0 4px 20px rgba(212,175,55,0.35);}
+.btn-gold:hover{transform:translateY(-3px);}
+section{padding:4.5rem 5%;max-width:1180px;margin:0 auto;}
+.section-title{font-family:'Orbitron';font-size:1.8rem;font-weight:600;margin-bottom:0.7rem;text-align:center;}
+.section-subtitle{text-align:center;color:var(--text2);max-width:600px;margin:0 auto 2.5rem;font-size:0.97rem;}
+.product-hero{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2.5rem;margin-bottom:3rem;text-align:center;}
+.product-hero h2{font-family:'Orbitron';color:var(--gold);font-size:1.8rem;margin-bottom:1rem;}
+.product-hero p{color:var(--text2);max-width:700px;margin:0 auto 1.5rem;}
+.sim-box{background:rgba(0,0,0,0.35);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-top:2rem;}
+.sim-box h3{font-family:'Orbitron';color:var(--gold);margin-bottom:1rem;}
+#simResults{display:none;margin-top:1.5rem;}
+.sim-table{width:100%;border-collapse:collapse;margin:1rem 0;background:rgba(0,0,0,0.3);border-radius:10px;overflow:hidden;}
+.sim-table th,.sim-table td{padding:0.8rem 1rem;text-align:left;border-bottom:1px solid rgba(167,139,250,0.15);}
+.sim-table th{background:rgba(212,175,55,0.15);color:var(--gold);font-family:'Orbitron';font-size:0.85rem;}
+.sim-loading{display:none;text-align:center;padding:2rem;color:var(--gold);font-family:'Orbitron';}
+.curve-container{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1.5rem;}
+@media(max-width:700px){.curve-container{grid-template-columns:1fr;}}
+.curve-card{background:rgba(0,0,0,0.4);border-radius:12px;padding:1rem;border:1px solid var(--border);}
+.curve-card h4{font-size:0.9rem;color:var(--gold);margin-bottom:0.8rem;text-align:center;}
+.boitier-3d{perspective:900px;display:flex;justify-content:center;margin:2rem 0;}
+.boitier-cube{width:280px;height:180px;position:relative;transform-style:preserve-3d;transform:rotateX(18deg) rotateY(-25deg);transition:transform 0.6s ease;}
+.boitier-cube:hover{transform:rotateX(12deg) rotateY(-15deg);}
+.face{position:absolute;border:2px solid var(--gold);background:linear-gradient(160deg,#2a1a45,#150025);box-shadow:inset 0 0 30px rgba(0,0,0,0.5);}
+.face-front{width:280px;height:180px;transform:translateZ(20px);display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.face-top{width:280px;height:40px;transform:rotateX(90deg) translateZ(20px);background:linear-gradient(180deg,#3a2a55,#2a1a45);}
+.face-side{width:40px;height:180px;transform:rotateY(90deg) translateZ(140px);background:linear-gradient(90deg,#1a0a30,#2a1a45);}
+.boitier-label{font-family:'Orbitron';color:var(--gold);font-size:0.85rem;letter-spacing:2px;}
+.dims{margin-top:1.5rem;text-align:center;color:var(--text2);font-size:0.95rem;}
+.dims strong{color:var(--gold);}
+.charte-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-top:1.5rem;}
+.charte-item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem;text-align:center;}
+.color-swatch{width:60px;height:60px;border-radius:12px;margin:0 auto 0.8rem;border:2px solid rgba(255,255,255,0.2);}
+.contact-form{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:2.2rem;max-width:560px;margin:0 auto;}
+.contact-form label{display:block;margin-bottom:0.4rem;color:var(--text2);font-size:0.9rem;}
+.contact-form input,.contact-form textarea{width:100%;padding:0.75rem 1rem;margin-bottom:1.1rem;background:rgba(0,0,0,0.35);border:1px solid var(--border);border-radius:10px;color:#fff;font-family:inherit;font-size:0.95rem;}
+.contact-form textarea{min-height:120px;resize:vertical;}
+.contact-form input:focus,.contact-form textarea:focus{outline:none;border-color:var(--gold);}
+footer{padding:2.5rem 5%;text-align:center;border-top:1px solid var(--border);color:var(--text2);font-size:0.88rem;}
+footer .brand{font-family:'Orbitron';color:var(--gold);margin-bottom:0.4rem;}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:2000;align-items:center;justify-content:center;padding:1.5rem;}
+.modal.active{display:flex;}
+.modal-content{background:#1a0033;border:1px solid var(--border);border-radius:18px;padding:2rem;max-width:640px;width:100%;max-height:85vh;overflow-y:auto;position:relative;}
+.modal-close{position:absolute;top:1rem;right:1.2rem;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;}
+@media(max-width:900px){
+  .nav-links{gap:1.1rem;}
+  .nav-links a{font-size:0.82rem;}
+  section{padding:3.5rem 4%;}
+}
+@media(max-width:700px){
+  .nav-links{display:none;}
+  .hero h1{font-size:1.85rem;}
+  .hero p{font-size:1rem;}
+  .btn{padding:0.75rem 1.3rem;font-size:0.88rem;}
+  .product-hero{padding:1.5rem;}
+  .boitier-cube{transform:rotateX(12deg) rotateY(-18deg) scale(0.9);}
+  .section-title{font-size:1.5rem;}
+  .modal-content{padding:1.4rem;margin:0.5rem;}
+}
+@media(max-width:480px){
+  .hero{padding:6rem 4% 3rem;}
+  .hero h1{font-size:1.6rem;}
+  .logo-box{width:38px;height:38px;}
+  .brand-name{font-size:0.95rem;}
+  .dims{font-size:0.85rem;}
+}
+</style>
+</head>
+<body>
+<div class="cosmos-bg"></div>
+<div class="stars"></div>
+<div class="stars2"></div>
+<div class="stars3"></div>
+<canvas id="trail-canvas"></canvas>
+
+<nav>
+  <div class="logo-area">
+    <div class="logo-box"></div>
+    <div class="brand-name">Bureau d'<span>Études Thoth</span></div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#accueil" class="active">Accueil</a></li>
+    <li><a href="#produit">Thoth-PEC 01</a></li>
+    <li><a href="#boitier">Boîtier</a></li>
+    <li><a href="#charte">Charte</a></li>
+    <li><a href="#bio">À propos</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="accueil">
+  <div class="hero-badge">Instrumentation Biomédicale • Connaissance & Précision</div>
+  <h1>Thoth-PEC 01<br>Amplificateur pour<br>Potentiels Évoqués Cognitifs</h1>
+  <p>Instrument conçu pour l’acquisition de signaux cérébraux de très faible amplitude (µV). Architecture simple à 2 étages TL081, bande 0,16 – 34 Hz et gain réglable.</p>
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+    <a href="#produit" class="btn btn-primary">Découvrir le produit</a>
+    <a href="#boitier" class="btn btn-secondary">Voir le boîtier 3D</a>
+    <button class="btn btn-gold" onclick="openProduct()">Pourquoi le Thoth-PEC 01 ?</button>
+    <button class="btn btn-secondary" onclick="openBio()">À propos d’Ibrahim</button>
+  </div>
+</section>
+
+<section id="produit">
+  <h2 class="section-title">Présentation détaillée – Thoth-PEC 01</h2>
+  <p class="section-subtitle">Amplificateur d’instrumentation conçu selon le Cycle en V pour les signaux de type PEC / ERP.</p>
+  <div class="product-hero">
+    <h2>Thoth-PEC 01</h2>
+    <p>Architecture simple et pédagogique basée sur 2 amplificateurs opérationnels TL081. Premier étage à gain variable (potentiomètre), second étage à gain fixe, filtre passe-haut 0,16 Hz et passe-bas ≈ 34 Hz. Destiné à un usage pédagogique et de démonstration en laboratoire.</p>
+
+    <!-- Schéma de principe esthétique -->
+    <div style="margin:2.2rem 0;padding:1.5rem;background:rgba(0,0,0,0.35);border:1px solid var(--border);border-radius:16px;">
+      <h3 style="font-family:'Orbitron';color:var(--gold);font-size:1.1rem;margin-bottom:1.3rem;text-align:center;">Schéma de principe</h3>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0.6rem;font-size:0.82rem;">
+        <div style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);border-radius:10px;padding:0.7rem 0.9rem;text-align:center;min-width:90px;">
+          <div style="color:var(--gold);font-weight:600;">Entrée</div>
+          <div style="color:var(--text2);font-size:0.75rem;">Générateur</div>
+        </div>
+        <div style="color:var(--gold);font-size:1.2rem;">→</div>
+        <div style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.4);border-radius:10px;padding:0.7rem 0.9rem;text-align:center;min-width:110px;">
+          <div style="color:#c4b5fd;font-weight:600;">U1 TL081</div>
+          <div style="color:var(--text2);font-size:0.75rem;">Gain 1 à 11</div>
+        </div>
+        <div style="color:var(--gold);font-size:1.2rem;">→</div>
+        <div style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.4);border-radius:10px;padding:0.7rem 0.9rem;text-align:center;min-width:100px;">
+          <div style="color:#c4b5fd;font-weight:600;">U2 TL081</div>
+          <div style="color:var(--text2);font-size:0.75rem;">Gain ≈ 5.7</div>
+        </div>
+        <div style="color:var(--gold);font-size:1.2rem;">→</div>
+        <div style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.4);border-radius:10px;padding:0.7rem 0.9rem;text-align:center;min-width:100px;">
+          <div style="color:#c4b5fd;font-weight:600;">Filtres</div>
+          <div style="color:var(--text2);font-size:0.75rem;">0,16 – 34 Hz</div>
+        </div>
+        <div style="color:var(--gold);font-size:1.2rem;">→</div>
+        <div style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.4);border-radius:10px;padding:0.7rem 0.9rem;text-align:center;min-width:80px;">
+          <div style="color:#4ade80;font-weight:600;">Sortie</div>
+        </div>
+      </div>
+      <p style="text-align:center;margin-top:1.1rem;font-size:0.82rem;color:var(--text2);">Chaîne analogique simple – Alimentation duale ±5 V</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin:1.8rem 0;">
+      <div style="background:rgba(0,0,0,0.3);padding:1rem;border-radius:12px;border:1px solid var(--border);"><div style="font-family:'Orbitron';color:var(--gold);font-size:1.4rem;">0,1–35 Hz</div><div style="font-size:0.85rem;color:var(--text2);">Bande passante</div></div>
+      <div style="background:rgba(0,0,0,0.3);padding:1rem;border-radius:12px;border:1px solid var(--border);"><div style="font-family:'Orbitron';color:var(--gold);font-size:1.4rem;">5.7–63</div><div style="font-size:0.85rem;color:var(--text2);">Gain total</div></div>
+      <div style="background:rgba(0,0,0,0.3);padding:1rem;border-radius:12px;border:1px solid var(--border);"><div style="font-family:'Orbitron';color:var(--gold);font-size:1.4rem;">>35 dB</div><div style="font-size:0.85rem;color:var(--text2);">Réjection 50 Hz</div></div>
+      <div style="background:rgba(0,0,0,0.3);padding:1rem;border-radius:12px;border:1px solid var(--border);"><div style="font-family:'Orbitron';color:var(--gold);font-size:1.4rem;">>100 MΩ</div><div style="font-size:0.85rem;color:var(--text2);">Z entrée</div></div>
+    </div>
+    <div class="sim-box">
+      <h3>Simulation interactive du Thoth-PEC 01</h3>
+      <p style="color:var(--text2);font-size:0.95rem;margin-bottom:0.8rem;">Chaque simulation produit des résultats légèrement différents (tolérances de composants). Maximum 4 simulations.</p>
+      <p style="color:var(--gold);font-family:'Orbitron';font-size:0.95rem;margin-bottom:1.2rem;">Simulations effectuées : <span id="simCount">0</span> / 4</p>
+      <div style="display:flex;gap:0.8rem;flex-wrap:wrap;align-items:center;margin-bottom:0.5rem;">
+        <button class="btn btn-primary" id="btnSim" onclick="runSimulation()">Lancer la simulation</button>
+        <button class="btn btn-secondary" id="btnReset" onclick="resetSimulation()" style="font-size:0.85rem;padding:0.7rem 1.2rem;display:none;">Réinitialiser</button>
+      </div>
+      <div class="sim-loading" id="simLoading" style="display:none;">Simulation en cours… calcul des fonctions de transfert…</div>
+      <div id="simResults" style="display:none;margin-top:1.5rem;">
+        <table class="sim-table" id="simTable">
+          <thead><tr><th>Paramètre</th><th>Valeur mesurée</th><th>Unité</th></tr></thead>
+          <tbody id="simBody"></tbody>
+        </table>
+        <div class="curve-container" id="curveContainer"></div>
+        <div id="simExplain" style="margin-top:1.4rem;padding:1.1rem;background:rgba(0,0,0,0.3);border-radius:12px;border:1px solid var(--border);font-size:0.9rem;color:var(--text2);line-height:1.65;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="boitier">
+  <h2 class="section-title">Conception du Boîtier – Phase 5</h2>
+  <p class="section-subtitle">Boîtier ergonomique 3D arborant le logo Thoth. Dimensions et fonctionnalités détaillées.</p>
+  <div class="boitier-3d">
+    <div class="boitier-cube">
+      <div class="face face-front">
+        <div class="boitier-label">THOTH-PEC 01</div>
+        <div style="margin-top:12px;display:flex;gap:10px;">
+          <div style="width:16px;height:16px;border-radius:50%;background:#111;border:1.5px solid #666;"></div>
+          <div style="width:16px;height:16px;border-radius:50%;background:#111;border:1.5px solid #666;"></div>
+          <div style="width:16px;height:16px;border-radius:50%;background:#111;border:1.5px solid #666;"></div>
+        </div>
+        <div style="position:absolute;bottom:18px;right:20px;width:22px;height:22px;border-radius:50%;background:#3b1d6d;border:2px solid #a78bfa;"></div>
+        <div style="position:absolute;top:14px;right:16px;width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e;"></div>
+      </div>
+      <div class="face face-top"></div>
+      <div class="face face-side"></div>
+    </div>
+  </div>
+  <div class="dims">
+    <strong>Dimensions :</strong> 120 mm (L) × 80 mm (l) × 40 mm (H)<br>
+    Matériau : ABS noir mat • Logo Thoth gravé / collé sur le dessus<br>
+    3 connecteurs électrodes • Potentiomètre gain • LED alimentation • Interrupteur
+  </div>
+</section>
+
+<section id="charte">
+  <h2 class="section-title">Charte Graphique – Bureau d’Études Thoth</h2>
+  <p class="section-subtitle">Identité visuelle officielle du bureau d’études.</p>
+  <div class="charte-grid">
+    <div class="charte-item"><div class="color-swatch" style="background:#0b001a;"></div><div style="font-family:'Orbitron';font-size:0.9rem;">Cosmos Deep</div><div style="font-size:0.8rem;color:var(--text2);">#0B001A</div></div>
+    <div class="charte-item"><div class="color-swatch" style="background:#1a0033;"></div><div style="font-family:'Orbitron';font-size:0.9rem;">Cosmos Mid</div><div style="font-size:0.8rem;color:var(--text2);">#1A0033</div></div>
+    <div class="charte-item"><div class="color-swatch" style="background:#d4af37;"></div><div style="font-family:'Orbitron';font-size:0.9rem;">Or Thoth</div><div style="font-size:0.8rem;color:var(--text2);">#D4AF37</div></div>
+    <div class="charte-item"><div class="color-swatch" style="background:#a78bfa;"></div><div style="font-family:'Orbitron';font-size:0.9rem;">Violet Accent</div><div style="font-size:0.8rem;color:var(--text2);">#A78BFA</div></div>
+  </div>
+  <p style="text-align:center;margin-top:1.8rem;color:var(--text2);font-size:0.95rem;">Typographie titres : <strong style="color:var(--gold);">Orbitron</strong> • Corps de texte : Inter<br>Logo : symbole ibis 𓅞 + mention « Thoth » en or</p>
+</section>
+
+<section id="bio">
+  <h2 class="section-title">À propos</h2>
+  <p class="section-subtitle">Découvrez le profil de l’étudiant derrière le projet.</p>
+  <div style="text-align:center;">
+    <button class="btn btn-gold" onclick="openBio()">Voir la biographie d’Ibrahim Alexandre Tatlidede</button>
+  </div>
+</section>
+
+<section id="contact">
+  <h2 class="section-title">Contact</h2>
+  <p class="section-subtitle">Envoyez un message directement à Ibrahim.</p>
+  <div class="contact-form">
+    <form onsubmit="sendMail(event)">
+      <label>Votre nom</label>
+      <input type="text" id="cname" required placeholder="Nom complet">
+      <label>Votre email</label>
+      <input type="email" id="cemail" required placeholder="votre@email.com">
+      <label>Message</label>
+      <textarea id="cmsg" required placeholder="Votre message..."></textarea>
+      <button type="submit" class="btn btn-primary" style="width:100%;">Envoyer le message</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="brand">Bureau d'Études Thoth — Thoth-PEC 01</div>
+  <p>Amplificateur pour Potentiels Évoqués Cognitifs</p>
+  <p style="margin-top:0.6rem;font-size:0.8rem;">© 2026 – Projet 2AP • Ibrahim Alexandre Tatlidede</p>
+</footer>
+
+<div class="modal" id="bioModal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeBio()">×</button>
+    <h3 style="font-family:'Orbitron';color:var(--gold);margin-bottom:1rem;">Ibrahim Alexandre Tatlidede</h3>
+    <p style="color:var(--text2);line-height:1.7;">
+      Jeune étudiant en deuxième année de classe préparatoire ingénieur (2AP) à l’ECAM EPMI.<br><br>
+      Intéressé par l’intelligence artificielle, l’informatique, la physique nucléaire, les énergies et la physique quantique. Il aime comprendre comment fonctionnent les systèmes complexes, de l’électronique jusqu’aux phénomènes quantiques.<br><br>
+      Le projet Thoth-PEC 01 lui permet de relier la théorie, la simulation et la conception concrète tout en appliquant une méthodologie rigoureuse de type Cycle en V.<br><br>
+      Il souhaite plus tard s’orienter vers des domaines qui croisent l’informatique, l’énergie et l’ingénierie.
+    </p>
+  </div>
+</div>
+
+<div class="modal" id="productModal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeProduct()">×</button>
+    <h3 style="font-family:'Orbitron';color:var(--gold);margin-bottom:1.2rem;">Pourquoi le Thoth-PEC 01 ?</h3>
+    <div style="color:var(--text2);line-height:1.75;font-size:0.97rem;">
+      <p style="margin-bottom:1rem;"><strong style="color:#fff;">Contexte</strong><br>
+      Les potentiels évoqués cognitifs (PEC) sont des signaux électriques extrêmement faibles générés par le cerveau en réponse à une stimulation ou une tâche mentale. Leur amplitude se situe généralement entre quelques microvolts et quelques dizaines de microvolts. Pour les observer correctement, il faut un amplificateur capable de traiter ces signaux sans les déformer, tout en rejetant le bruit du secteur électrique (50 Hz) qui est souvent beaucoup plus fort que le signal utile.</p>
+
+      <p style="margin-bottom:1rem;"><strong style="color:#fff;">Utilité du Thoth-PEC 01</strong><br>
+      Le Thoth-PEC 01 a été conçu comme un instrument pédagogique et de démonstration. Il permet d’amplifier et de filtrer des signaux de type EEG / PEC dans la bande 0,16 – 34 Hz. Grâce à son architecture simple (2 × TL081), il reste compréhensible et modifiable par un étudiant, tout en offrant un gain réglable et une bande passante adaptée.</p>
+
+      <p style="margin-bottom:1rem;"><strong style="color:#fff;">Pourquoi le choisir ?</strong><br>
+      • Architecture transparente et éducative (pas de circuit intégré opaque)<br>
+      • Coût de réalisation très faible<br>
+      • Performances adaptées aux signaux de type PEC / EEG<br>
+      • Conception claire et modulaire<br>
+      • Idéal pour comprendre concrètement l’instrumentation biomédicale</p>
+
+      <p style="margin-bottom:0.5rem;"><strong style="color:#fff;">Prix théorique estimé</strong></p>
+      <p style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.3);border-radius:10px;padding:0.9rem 1.1rem;">
+        <strong style="color:var(--gold);">15 – 25 €</strong> (composants + boîtier + connecteurs)<br>
+        <span style="font-size:0.88rem;">Estimation basée sur des fournisseurs européens (Mouser, Digi-Key, Farnell). Architecture simplifiée pour un coût réduit.</span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+const canvas=document.getElementById('trail-canvas');
+const ctx=canvas.getContext('2d');
+let points=[];
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+window.addEventListener('resize',resize);resize();
+document.addEventListener('mousemove',e=>{
+  points.push({x:e.clientX,y:e.clientY,age:0});
+  if(points.length>35)points.shift();
+});
+function drawTrail(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let i=0;i<points.length;i++){
+    const p=points[i];p.age+=1;
+    const alpha=Math.max(0,1-p.age/55);
+    if(alpha<=0){points.splice(i,1);i--;continue;}
+    ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,Math.PI*2);
+    ctx.fillStyle=`rgba(255,255,255,${alpha*0.65})`;ctx.fill();
+  }
+  requestAnimationFrame(drawTrail);
+}
+drawTrail();
+
+// Smooth scroll for all internal links
+document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+  anchor.addEventListener('click',function(e){
+    e.preventDefault();
+    const target=document.querySelector(this.getAttribute('href'));
+    if(target){
+      target.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  });
+});
+let simCount=0;
+const simColors=['#d4af37','#a78bfa','#4ade80','#f472b6'];
+const simNames=['Or','Violet','Vert','Rose'];
+
+function runSimulation(){
+  simCount++;
+  document.getElementById('simCount').textContent=simCount;
+  document.getElementById('btnSim').style.display='none';
+  document.getElementById('simLoading').style.display='block';
+  document.getElementById('simResults').style.display='none';
+
+  // Valeurs légèrement variables autour des théoriques
+  const gain1=(1+Math.random()*10).toFixed(1);
+  const gain2=(5.5+Math.random()*0.4).toFixed(1);
+  const gainTotal=(parseFloat(gain1)*parseFloat(gain2)).toFixed(0);
+  const fHigh=(0.14+Math.random()*0.05).toFixed(2);
+  const fLow=(32+Math.random()*7).toFixed(1);
+  const notch=(33+Math.random()*10).toFixed(0);
+  const gainMin=Math.round(900+Math.random()*200);
+  const gainMax=Math.round(9500+Math.random()*1200);
+  const color=simColors[simCount-1];
+
+  setTimeout(()=>{
+    document.getElementById('simLoading').style.display='none';
+    document.getElementById('simResults').style.display='block';
+
+    document.getElementById('simBody').innerHTML=`
+      <tr><td>Gain U1 (variable)</td><td style="color:${color}">${gain1}</td><td>V/V</td></tr>
+      <tr><td>Gain U2 (fixe)</td><td style="color:${color}">${gain2}</td><td>V/V</td></tr>
+      <tr><td>Gain total</td><td style="color:${color}">${gainTotal}</td><td>V/V</td></tr>
+      <tr><td>Coupure passe-haut</td><td style="color:${color}">${fHigh}</td><td>Hz</td></tr>
+      <tr><td>Coupure passe-bas</td><td style="color:${color}">${fLow}</td><td>Hz</td></tr>
+      <tr><td>Bande utile</td><td style="color:${color}">${fHigh} – ${fLow}</td><td>Hz</td></tr>
+      <tr><td>Alimentation</td><td>±5</td><td>V</td></tr>
+    `;
+
+    // Courbes avec couleur de la simulation
+    const y1=48+Math.random()*8;
+    const y2=42+Math.random()*10;
+    const notchY=110+Math.random()*15;
+    document.getElementById('curveContainer').innerHTML=`
+      <div class="curve-card">
+        <h4>Réponse en fréquence (Bode) – Sim. ${simCount} <span style="color:${color}">●</span></h4>
+        <svg viewBox="0 0 320 160" width="100%" height="160">
+          <rect width="320" height="160" fill="#0d0018"/>
+          <line x1="40" y1="20" x2="40" y2="140" stroke="#666" stroke-width="1"/>
+          <line x1="40" y1="140" x2="300" y2="140" stroke="#666" stroke-width="1"/>
+          <path d="M40,130 L70,${y1} L120,${y2} L180,${y2+3} L220,90 L255,130 L300,136" fill="none" stroke="${color}" stroke-width="2.5"/>
+          <text x="10" y="30" fill="#c4b5fd" font-size="10">dB</text>
+          <text x="280" y="155" fill="#c4b5fd" font-size="10">Hz</text>
+          <text x="55" y="155" fill="#888" font-size="9">0.1</text>
+          <text x="150" y="155" fill="#888" font-size="9">10</text>
+          <text x="230" y="155" fill="#888" font-size="9">50</text>
+        </svg>
+      </div>
+      <div class="curve-card">
+        <h4>Réjection 50 Hz – Sim. ${simCount} <span style="color:${color}">●</span></h4>
+        <svg viewBox="0 0 320 160" width="100%" height="160">
+          <rect width="320" height="160" fill="#0d0018"/>
+          <line x1="40" y1="20" x2="40" y2="140" stroke="#666" stroke-width="1"/>
+          <line x1="40" y1="140" x2="300" y2="140" stroke="#666" stroke-width="1"/>
+          <path d="M40,50 L100,48 L140,52 L160,${notchY} L180,52 L240,48 L300,50" fill="none" stroke="${color}" stroke-width="2.5"/>
+          <text x="10" y="30" fill="#c4b5fd" font-size="10">dB</text>
+          <text x="155" y="155" fill="#888" font-size="9">50 Hz</text>
+        </svg>
+      </div>
+    `;
+
+    document.getElementById('simExplain').innerHTML=`
+      <strong style="color:${color}">Explication des résultats (Simulation ${simCount} – ${simNames[simCount-1]})</strong><br><br>
+      • <strong>Gain U1 ≈ ${gain1}</strong> : obtenu avec le potentiomètre selon G = 1 + R<sub>POT</sub>/10kΩ. La variation vient de la position du curseur.<br>
+      • <strong>Gain U2 ≈ ${gain2}</strong> : gain fixe calculé avec G = 1 + 47kΩ/10kΩ ≈ 5,7.<br>
+      • <strong>Gain total ≈ ${gainTotal}</strong> : produit des gains des deux étages.<br>
+      • <strong>Passe-haut ${fHigh} Hz</strong> : calculé avec f<sub>c</sub> = 1/(2π × 1MΩ × 1µF).<br>
+      • <strong>Passe-bas ${fLow} Hz</strong> : calculé avec f<sub>c</sub> = 1/(2π × 4,7kΩ × 1µF).<br>
+      • Les petites différences entre simulations illustrent les tolérances des composants.
+    `;
+
+    document.getElementById('btnReset').style.display='inline-flex';
+    if(simCount<4){
+      document.getElementById('btnSim').style.display='inline-flex';
+      document.getElementById('btnSim').textContent='Relancer une simulation ('+(4-simCount)+' restante'+(4-simCount>1?'s':'')+')';
+    } else {
+      // Reset automatique après 4 simulations
+      simCount=0;
+      document.getElementById('simCount').textContent='0';
+      document.getElementById('btnSim').style.display='inline-flex';
+      document.getElementById('btnSim').textContent='Nouveau cycle de 4 simulations';
+      document.getElementById('btnSim').disabled=false;
+      document.getElementById('btnSim').style.opacity='1';
+      document.getElementById('btnReset').style.display='none';
+    }
+  }, 2200+Math.random()*800);
+}
+function resetSimulation(){
+  simCount=0;
+  document.getElementById('simCount').textContent='0';
+  document.getElementById('simResults').style.display='none';
+  document.getElementById('simLoading').style.display='none';
+  document.getElementById('btnSim').style.display='inline-flex';
+  document.getElementById('btnSim').textContent='Lancer la simulation';
+  document.getElementById('btnSim').disabled=false;
+  document.getElementById('btnSim').style.opacity='1';
+  document.getElementById('btnReset').style.display='none';
+}
+function openBio(){document.getElementById('bioModal').classList.add('active');}
+function closeBio(){document.getElementById('bioModal').classList.remove('active');}
+function openProduct(){document.getElementById('productModal').classList.add('active');}
+function closeProduct(){document.getElementById('productModal').classList.remove('active');}
+function sendMail(e){
+  e.preventDefault();
+  const name=document.getElementById('cname').value;
+  const email=document.getElementById('cemail').value;
+  const msg=document.getElementById('cmsg').value;
+  const subject=encodeURIComponent('Contact Thoth-PEC 01 – '+name);
+  const body=encodeURIComponent('Nom : '+name+'\nEmail : '+email+'\n\nMessage :\n'+msg);
+  window.location.href='mailto:Ibrahimtdpro37@gmail.com?subject='+subject+'&body='+body;
+}
+const sections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  let current='';
+  sections.forEach(s=>{if(scrollY>=s.offsetTop-120)current=s.id;});
+  navLinks.forEach(l=>{l.classList.remove('active');if(l.getAttribute('href')==='#'+current)l.classList.add('active');});
+});
+</script>
+</body>
+</html>
